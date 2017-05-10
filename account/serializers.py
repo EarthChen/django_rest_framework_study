@@ -37,6 +37,7 @@ class AccountSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+    
     def validate_email(self, value):
         try:
             result_email = User.objects.get(email=value)

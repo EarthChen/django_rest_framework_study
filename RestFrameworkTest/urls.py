@@ -1,3 +1,4 @@
+# coding=utf-8
 """RestFrameworkTest URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -16,8 +17,15 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
+    # 使用django-rest-framework-jwt进行生成和刷新token的url
+    url(r'^api-token-auth/', obtain_jwt_token),
+
+    # 使用django-rest-framework自带的auth进行登入登出操作的url
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('api.urls')),
     url(r'^account/', include('account.urls'))

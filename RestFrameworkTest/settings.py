@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,8 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework.authtoken',  # 设置token
+    'corsheaders',  # 可以使用这个模块来实现允许跨域
+    'rest_framework',
+
+    # 自己创建的app django1.9之后均为以下格式
     'api.apps.ApiConfig',
-    'rest_framework'
+    'account.apps.AccountConfig'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -51,6 +55,10 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 设置跨域（使用corsheaders必须添加的中间件）
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'RestFrameworkTest.urls'
@@ -74,7 +82,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'RestFrameworkTest.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -84,7 +91,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -104,13 +110,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -118,25 +123,29 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# 设置允许跨域的域（corsheaders的配置项）
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:80',
+    'localhost:8080',
+    '127.0.0.1',
+)
 
 # django-rest-framework设置
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 
-
     # 设置所有接口都需要被验证
-    #'DEFAULT_PERMISSION_CLASSES': (
+    # 'DEFAULT_PERMISSION_CLASSES': (
     #    'rest_framework.permissions.IsAuthenticated',
-    #),
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-    #    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    #    'rest_framework.authentication.SessionAuthentication',
-     #   'rest_framework.authentication.BasicAuthentication',
+        #    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
 }
